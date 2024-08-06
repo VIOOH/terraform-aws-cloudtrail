@@ -7,6 +7,23 @@ resource "aws_cloudtrail" "default" {
   name           = var.name
   s3_bucket_name = var.s3_bucket_name
 
+  event_selector {
+    read_write_type           = "All"
+    include_management_events = true
+
+    data_resource {
+      type   = "AWS::S3::Object"
+      values = ["arn:aws:s3"]
+    }
+  }
+
+  insight_selector {
+    insight_type = "ApiCallRateInsight" 
+  }
+  insight_selector {
+    insight_type = "ApiErrorRateInsight"
+  }
+
   # When you create a trail, logging is turned on automatically. You can turn off logging for a trail.
   # https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-turning-off-logging.html
   enable_logging = var.enable_logging
