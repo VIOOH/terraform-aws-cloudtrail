@@ -55,3 +55,9 @@ variable "tags" {
   default     = {}
   description = "A mapping of tags to assign to the bucket."
 }
+
+variable "enable_event_selector" {
+  default     = false
+  type        = bool
+  description = "Enable Event Selector like S3 Bucket Lambda etc"
+}

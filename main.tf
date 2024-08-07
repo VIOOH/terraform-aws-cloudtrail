@@ -7,13 +7,18 @@ resource "aws_cloudtrail" "default" {
   name           = var.name
   s3_bucket_name = var.s3_bucket_name
 
-  event_selector {
-    read_write_type           = "All"
-    include_management_events = true
+  # Provide option to select Event Selector, by detault its disabled.
+  dynamic "event_selector" {
+    for_each = var.enable_event_selector ? [1] : []
 
-    data_resource {
-      type   = "AWS::S3::Object"
-      values = ["arn:aws:s3"]
+    content {
+      read_write_type          = "All"
+      include_management_events = true
+
+      data_resource {
+        type       = "AWS::S3::Object"
+        values     = ["arn:aws:s3"]
+      }
     }
   }
 
